@@ -62,7 +62,7 @@ class FeatureViewModel {
       );
 
       if (isCacheExpired()) {
-        source.fetchFeatures(
+        await source.fetchFeatures(
           (data) {
             _handleSuccess(data);
           },
@@ -106,23 +106,22 @@ class FeatureViewModel {
               isRemote: true,
             );
           });
-      
     }
   }
 
   void _handleSuccess(FeaturedDataModel data) {
-  delegate.featuresFetchedSuccessfully(
-    gbFeatures: data.features!,
-    isRemote: true,  // This is a network fetch, so it should be remote
-  );
-  cacheFeatures(data);
-  refreshExpiresAt();
-}
-
+    delegate.featuresFetchedSuccessfully(
+      gbFeatures: data.features!,
+      isRemote: true, // This is a network fetch, so it should be remote
+    );
+    cacheFeatures(data);
+    refreshExpiresAt();
+  }
 
   Map<String, GBFeature> _fetchCachedFeatures(Uint8List receivedData) {
     final receivedDataJson = utf8Decoder.convert(receivedData);
-    final receiveFeatureJsonMap = jsonDecode(receivedDataJson) as Map<String, dynamic>;
+    final receiveFeatureJsonMap =
+        jsonDecode(receivedDataJson) as Map<String, dynamic>;
 
     GBFeatures featureMap = {};
     if (encryptionKey.isNotEmpty) {
