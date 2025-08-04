@@ -250,7 +250,6 @@ class GrowthBookSDK extends FeaturesFlowDelegate {
     subscriptions.clear();
   }
 
-  @Deprecated('use featureFetch instead')
   GBFeatureResult feature(String id) {
     _featureViewModel.fetchFeatures(context.getFeaturesURL());
     return FeatureEvaluator().evaluateFeature(_evaluationContext, id);
