@@ -46,6 +46,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final userAttr = {"id": (!kIsWeb && Platform.isIOS) ? "foo" : "foo_bar"};
   GrowthBookSDK? gb;
+
   @override
   void initState() {
     super.initState();
@@ -137,6 +138,7 @@ class _CirclePainter extends BoxPainter {
       : _paint = Paint()
           ..color = color
           ..isAntiAlias = false;
+
   @override
   void paint(Canvas canvas, Offset offset, ImageConfiguration cfg) {
     final Offset circleOffset =

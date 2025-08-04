@@ -219,7 +219,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "3.9.15"
+    version: "3.9.16"
   http_parser:
     dependency: transitive
     description:
