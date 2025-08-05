@@ -251,18 +251,20 @@ class GrowthBookSDK extends FeaturesFlowDelegate {
   }
 
   GBFeatureResult feature(String id) {
-    _featureViewModel.fetchFeatures(context.getFeaturesURL());
+    if (_context.remoteEval) {
+      refreshForRemoteEval();
+    } else {
+      _featureViewModel.fetchFeatures(context.getFeaturesURL());
+    }
     return FeatureEvaluator().evaluateFeature(_evaluationContext, id);
   }
 
   Future<GBFeatureResult> featureFetch(String id) async {
-    String? url;
     if (_context.remoteEval) {
-      url = context.getRemoteEvalUrl();
+      await refreshForRemoteEval();
     } else {
-      url = context.getFeaturesURL();
+      await _featureViewModel.fetchFeatures(context.getFeaturesURL());
     }
-    await _featureViewModel.fetchFeatures(url);
     return FeatureEvaluator().evaluateFeature(_evaluationContext, id);
   }
 
