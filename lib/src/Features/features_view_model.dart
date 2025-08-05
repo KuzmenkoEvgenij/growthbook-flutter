@@ -61,7 +61,7 @@ class FeatureViewModel {
         isRemote: false,
       );
 
-      if (isCacheExpired()) {
+      if (!remoteEval && isCacheExpired()) {
         await source.fetchFeatures(
           (data) {
             _handleSuccess(data);
@@ -75,7 +75,7 @@ class FeatureViewModel {
           ),
         );
       }
-    } else {
+    } else if (!remoteEval) {
       await source.fetchFeatures(
         (data) {
           _handleSuccess(data);
