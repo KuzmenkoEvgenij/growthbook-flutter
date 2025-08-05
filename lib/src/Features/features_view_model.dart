@@ -53,6 +53,7 @@ class FeatureViewModel {
       {bool remoteEval = false, RemoteEvalModel? payload}) async {
     final receivedData =
         await manager.getContent(fileName: Constant.featureCache);
+    final isRemoteEval = apiUrl != null && remoteEval;
 
     if (receivedData != null) {
       final featureMap = _fetchCachedFeatures(receivedData);
@@ -61,7 +62,7 @@ class FeatureViewModel {
         isRemote: false,
       );
 
-      if (isCacheExpired()) {
+      if (!isRemoteEval && isCacheExpired()) {
         await source.fetchFeatures(
           (data) {
             _handleSuccess(data);
@@ -75,7 +76,7 @@ class FeatureViewModel {
           ),
         );
       }
-    } else {
+    } else if (!isRemoteEval) {
       await source.fetchFeatures(
         (data) {
           _handleSuccess(data);
@@ -90,7 +91,7 @@ class FeatureViewModel {
       );
     }
 
-    if (apiUrl != null && remoteEval) {
+    if (isRemoteEval) {
       await source.fetchRemoteEval(
           apiUrl: apiUrl,
           params: payload,
