@@ -54,7 +54,6 @@ class CachingManager extends CachingLayer {
     }
     try {
       fileManager.writeAsBytesSync(content);
-      log('Content saved successfully to: $fileName');
     } catch (e) {
       log('Failed to save content: $e');
     }
