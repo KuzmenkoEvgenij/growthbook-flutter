@@ -120,21 +120,30 @@ class FeatureViewModel {
   }
 
   Map<String, GBFeature> _fetchCachedFeatures(Uint8List receivedData) {
-    final receivedDataJson = utf8Decoder.convert(receivedData);
-    final receiveFeatureJsonMap =
-        jsonDecode(receivedDataJson) as Map<String, dynamic>;
+    try {
+      final receivedDataJson = utf8Decoder.convert(receivedData);
+      final receiveFeatureJsonMap =
+          jsonDecode(receivedDataJson) as Map<String, dynamic>;
 
-    GBFeatures featureMap = {};
-    if (encryptionKey.isNotEmpty) {
-      // For encrypted features, parse directly as features map
-      const converter = GBFeaturesConverter();
-      featureMap = converter.fromJson(receiveFeatureJsonMap);
-    } else {
-      // For non-encrypted, use the full data model
-      featureMap =
-          FeaturedDataModel.fromJson(receiveFeatureJsonMap).features ?? {};
+      if (receiveFeatureJsonMap.isEmpty) {
+        return {};
+      }
+
+      GBFeatures featureMap = {};
+      if (encryptionKey.isNotEmpty) {
+        // For encrypted features, parse directly as features map
+        const converter = GBFeaturesConverter();
+        featureMap = converter.fromJson(receiveFeatureJsonMap);
+      } else {
+        // For non-encrypted, use the full data model
+        featureMap =
+            FeaturedDataModel.fromJson(receiveFeatureJsonMap).features ?? {};
+      }
+      return featureMap;
+    } on FormatException {
+      logError("Failed to parse JSON.");
+      return {};
     }
-    return featureMap;
   }
 
   void prepareFeaturesData(FeaturedDataModel data) {
